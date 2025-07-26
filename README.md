@@ -11,3 +11,6 @@ In a future improvement, this can be simplified by using a **Spring Interceptor*
 ---
 For now you have to run by the "Run and Debug" view and tapping the "play" butto there
 mvn spring-boot:run
+
+---
+We're using a local sqlite.db but if needed we can add API to connect to a remotely hosted DB
