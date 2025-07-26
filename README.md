@@ -1,10 +1,13 @@
-# Java API Service Starter
+# Spring Boot + Thymeleaf Demo
 
-This is a minimal Java API service starter based on [Google Cloud Run Quickstart](https://cloud.google.com/run/docs/quickstarts/build-and-deploy/deploy-java-service).
+This project demonstrates:
+- **Session management** with login/logout  
+- **Form handling & validation** (e.g., book purchase, login form)  
+- **Static vs. template resources** (e.g., `/privacy` as static, others as Thymeleaf templates)  
 
-## Getting Started
+Currently, the `username` for the logged-in user is added in **each controller** manually.  
+In a future improvement, this can be simplified by using a **Spring Interceptor** to set it globally for all pages.
 
-Server should run automatically when starting a workspace. To run manually, run:
-```sh
+---
+For now you have to run by the "Run and Debug" view and tapping the "play" butto there
 mvn spring-boot:run
-```
