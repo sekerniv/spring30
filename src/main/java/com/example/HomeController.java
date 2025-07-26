@@ -14,25 +14,22 @@ import java.util.List;
 public class HomeController {
 
     @GetMapping("/")
-    public String books(Model model, HttpSession session) {
+    public String books(Model model, HttpSession session) throws Exception {
         List<Book> books = new ArrayList<>();
         String sql = "SELECT * FROM books";
 
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:sqlite.db");
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+        Connection conn = DriverManager.getConnection("jdbc:sqlite:sqlite.db");
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
 
-            while (rs.next()) {
-                Book b = new Book();
-                b.setId(rs.getInt("id"));
-                b.setTitle(rs.getString("title"));
-                b.setAuthor(rs.getString("author"));
-                b.setImage(rs.getString("image"));
-                b.setPrice(rs.getDouble("price"));
-                books.add(b);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        while (rs.next()) {
+            Book b = new Book();
+            b.setId(rs.getInt("id"));
+            b.setTitle(rs.getString("title"));
+            b.setAuthor(rs.getString("author"));
+            b.setImage(rs.getString("image"));
+            b.setPrice(rs.getDouble("price"));
+            books.add(b);
         }
 
         model.addAttribute("books", books);

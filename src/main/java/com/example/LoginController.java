@@ -1,13 +1,18 @@
 package com.example;
 
-import jakarta.servlet.http.HttpSession;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.sql.*;
-import java.util.HashMap;
-import java.util.Map;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/login")
@@ -20,27 +25,23 @@ public class LoginController {
 
     @PostMapping
     public String processLogin(@RequestParam String username,
-                               @RequestParam String password,
-                               HttpSession session,
-                               Model model) {
-        // Very basic authentication (match user in SQLite)
+            @RequestParam String password,
+            HttpSession session,
+            Model model) throws Exception {
+
         String sql = "SELECT * FROM users WHERE username=? AND password=?";
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:sqlite.db");
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, username);
-            stmt.setString(2, password);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                session.setAttribute("username", username);
-                return "redirect:/";
-            } else {
-                model.addAttribute("message", "Wrong details");
-                return "login";
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            model.addAttribute("message", "Database error");
+        Connection conn = DriverManager.getConnection("jdbc:sqlite:sqlite.db");
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setString(1, username);
+        stmt.setString(2, password);
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            session.setAttribute("username", username);
+            return "redirect:/";
+        } else {
+            model.addAttribute("message", "Wrong details");
             return "login";
         }
+
     }
 }
